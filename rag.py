@@ -30,3 +30,7 @@ conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
 conn.execute("DROP TABLE IF EXISTS fragmentos")
 conn.execute(f"CREATE TABLE fragmentos (id SERIAL PRIMARY KEY, documento TEXT, texto TEXT, embedding VECTOR({DIMENSIONES}))")
 conn.execute("CREATE INDEX ON fragmentos USING hnsw (embedding vector_cosine_ops)")
+
+for nombre, trozo in chunks:
+    conn.execute("INSERT INTO fragmentos (documento, texto, embedding) VALUES (%s, %s, %s)",
+    (nombre, trozo, embedding(trozo)))
