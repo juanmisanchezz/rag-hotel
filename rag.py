@@ -1,7 +1,8 @@
 from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter 
 from db import conectar, embedding, DIMENSIONES
-
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama import ChatOllama
 
 documentos = [
 
@@ -40,3 +41,11 @@ def recuperar(pregunta):
     resultados = conn.execute("SELECT documento, texto FROM fragmentos ORDER BY embedding <=> %s LIMIT 3", (Vector,))
     return resultados.fetchall()
 print(recuperar("¿A qué hora es el desayuno?"))
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "Responde usando SOLO este contexto. Si la respuesta no esta, responde exactamente "
+               "'No lo sé.' Responde en 1-2 frases.\n\nCONTEXTO:\n{contexto}"),
+    ("human", "{pregunta}"),
+])
+
+cadena = prompt | ChatOllama(model="llama3.1", temperature = 0)
