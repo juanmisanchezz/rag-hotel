@@ -1,4 +1,5 @@
 from pathlib import Path
+from langchain_text_splitters import RecursiveCharacterTextSplitter 
 
 documentos = [
 
@@ -11,3 +12,4 @@ print (len(documentos))
 for nombre, variable in documentos:
     print(nombre)
 
+splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=60)
