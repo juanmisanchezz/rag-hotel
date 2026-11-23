@@ -13,3 +13,12 @@ for nombre, variable in documentos:
     print(nombre)
 
 splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=60)
+
+chunks = [
+
+]
+
+for nombre, texto in documentos:
+    for trozo in splitter.split_text(texto):
+        chunks.append((nombre, trozo))
+print (len(chunks))
