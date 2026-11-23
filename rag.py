@@ -34,3 +34,9 @@ conn.execute("CREATE INDEX ON fragmentos USING hnsw (embedding vector_cosine_ops
 for nombre, trozo in chunks:
     conn.execute("INSERT INTO fragmentos (documento, texto, embedding) VALUES (%s, %s, %s)",
     (nombre, trozo, embedding(trozo)))
+
+def recuperar(pregunta):
+    Vector = embedding(pregunta)
+    resultados = conn.execute("SELECT documento, texto FROM fragmentos ORDER BY embedding <=> %s LIMIT 3", (Vector,))
+    return resultados.fetchall()
+print(recuperar("¿A qué hora es el desayuno?"))
