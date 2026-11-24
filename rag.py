@@ -60,3 +60,4 @@ def responder (pregunta):
     return(respuesta.content)
 
 print(responder(f"Puedo llevar a mi perro?"))
+print(responder(f"Tenéis gimnasio?"))
