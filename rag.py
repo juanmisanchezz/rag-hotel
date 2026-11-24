@@ -49,3 +49,13 @@ prompt = ChatPromptTemplate.from_messages([
 ])
 
 cadena = prompt | ChatOllama(model="llama3.1", temperature = 0)
+
+def responder (pregunta):
+    trozos = recuperar(pregunta)
+    contexto = ""
+
+    for documento, texto in trozos:
+        contexto += f"[{documento}] {texto}\n\n"
+    print(contexto)
+
+responder(f"Puedo llevar a mi perro?")
