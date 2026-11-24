@@ -10,10 +10,7 @@ documentos = [
 
 for ruta in Path("docs").glob("*.txt"):
     documentos.append((ruta.name, ruta.read_text(encoding="utf-8")))
-print (len(documentos))
 
-for nombre, variable in documentos:
-    print(nombre)
 
 splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=60)
 
@@ -24,7 +21,6 @@ chunks = [
 for nombre, texto in documentos:
     for trozo in splitter.split_text(texto):
         chunks.append((nombre, trozo))
-print (len(chunks))
 
 conn = conectar() 
 conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
@@ -40,7 +36,6 @@ def recuperar(pregunta):
     Vector = embedding(pregunta)
     resultados = conn.execute("SELECT documento, texto FROM fragmentos ORDER BY embedding <=> %s LIMIT 3", (Vector,))
     return resultados.fetchall()
-print(recuperar("¿A qué hora es el desayuno?"))
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", "Responde usando SOLO este contexto. Si la respuesta no esta, responde exactamente "
@@ -59,5 +54,10 @@ def responder (pregunta):
     respuesta = cadena.invoke({"contexto" : contexto, "pregunta":pregunta})
     return(respuesta.content)
 
-print(responder(f"Puedo llevar a mi perro?"))
-print(responder(f"Tenéis gimnasio?"))
+pregunta = "¿Puedo llevar a mi perro?"
+print("Pregunta:", pregunta)
+print("Respuesta:", responder(pregunta))
+print()
+pregunta = "¿Tenéis gimnasio?"
+print("Pregunta:", pregunta)
+print("Respuesta:", responder(pregunta))
