@@ -56,6 +56,7 @@ def responder (pregunta):
 
     for documento, texto in trozos:
         contexto += f"[{documento}] {texto}\n\n"
-    print(contexto)
+    respuesta = cadena.invoke({"contexto" : contexto, "pregunta":pregunta})
+    return(respuesta.content)
 
-responder(f"Puedo llevar a mi perro?")
+print(responder(f"Puedo llevar a mi perro?"))
